@@ -6,6 +6,7 @@ let score;
 let questionNumber;
 let currentQuestion;
 let buttonsActive;
+let timeout;
 
 function drawSvgBorder(node) {
     node.empty();
@@ -91,7 +92,7 @@ function newGame() {
         ),
         new Question('Which character is known for their catchphrase: "You\'re already dead"',
             'Kenshiro',
-            'Jotaro Kojo',
+            'Jotaro Kujo',
             'Haruhi Suzumiya',
             'Amuro Ray'
         ),
@@ -114,6 +115,7 @@ function displayQuestion(question) {
 
     $('#question').text(currentQuestion.question);
 
+    timeout = false; // stop the animation complete callback from being called twice;
     $('.timer-path').stop().css({ 'stroke-dashoffset': timerLength }).attr('data-color', 'blue').animate({ // Animate the bar's movement
         'stroke-dashoffset': 0,
     }, {
@@ -175,8 +177,14 @@ function displayQuestion(question) {
 }
 
 function timeUp() {
-    blackScene(questionNumber, 'Not answered').then(nextQuestion);
-    questionNumber++;
+    console.log('timeup');
+    if (!timeout) {
+        timeout = true;
+        questionNumber++;
+        blackScene(questionNumber, 'Not answered', `Score: ${score}`).then(nextQuestion);
+        
+    }
+
 }
 
 function blackScene(number, ...messages) {
