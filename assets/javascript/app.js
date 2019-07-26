@@ -2,6 +2,10 @@ let timerLength;
 let left;
 let right;
 let questions;
+let score;
+let questionNumber;
+let currentQuestion;
+let buttonsActive;
 
 function drawSvgBorder(node) {
     node.empty();
@@ -54,32 +58,47 @@ function drawSvgBorder(node) {
 
 
 }
-let questionNumber = 1;
-let currentQuestion;
-let buttonsActive = false;
 
 function newGame() {
+    score = 0;
+    questionNumber = 1;
+    currentQuestion;
+    buttonsActive = false;
     questions = [
         new Question('What does Hitagi Senjougahara slip on in the first episode of Bakemonogatari?',
             'A Banana Peel',
             'A Crab',
-            'An Oil-Spill',
+            'A Puddle',
             'A Stapler'
         ),
         new Question('What is the perfect (ultimate in English) form of Gomamon in Digimon Adventure?',
             'Zudomon',
             'Ikakumon',
             'WarGreymon',
-            'Megadramon'),
-
+            'Megadramon'
+        ),
         new Question('What fictional metal is MetalEtemon made of in Digimon Adventure?',
             'Chrome Digizoid',
-            'Adamantium',
+            'Tempered Digimantium',
             'Digichalcum',
-            'Mythril'
-        )
+            'Star Platinum'
+        ),
+        new Question('Which of the following is not one of the Pillar-Men from Jojo\'s Bizzare Adventure',
+            'Kiss',
+            'Cars',
+            'Wham',
+            'ACDC'
+        ),
+        new Question('Which character is known for their catchphrase: "You\'re already dead"',
+            'Kenshiro',
+            'Jotaro Kojo',
+            'Haruhi Suzumiya',
+            'Amuro Ray'
+        ),
+
     ]
 }
+
 
 function nextQuestion() {
     questions = questions.reduce((a, v) => a.splice(Math.floor(Math.random() * a.length), 0, v) && a, []);
@@ -148,8 +167,6 @@ function displayQuestion(question) {
 
                     $(this).animate({ stroke: 'rgb(242, 2, 5)' }, 1000);
                 }
-
-
             },
             done: timeUp
         });
@@ -159,13 +176,17 @@ function displayQuestion(question) {
 
 function timeUp() {
     blackScene(questionNumber, 'Not answered').then(nextQuestion);
+    questionNumber++;
 }
 
-function blackScene(number, message) {
+function blackScene(number, ...messages) {
     $('.container').append(
         $('<div class="black-scene">').append(
-            $('<h1 class="black-scene-number">').text(number),
-            $('<h3 class="black-scene-message">').text(message),
+            $('<h1 class="black-scene-number">').text(`${number.toString().padStart(3, '0')}`),
+
+            $('<div class="black-scene-message-box">').append(
+                ...messages.map(message => $('<h3 class="black-scene-message">').text(message))
+            )
         )
     );
     return new Promise(resolve => setTimeout(() => {
@@ -188,16 +209,17 @@ $(document).ready(function () {
 
     $('.answer-box').on('click', '.answer', function () {
         if (buttonsActive) {
-            let message = `Question ${questionNumber.toString().padStart(3 - questionNumber.toString().length, '0')} `;
+            let message = ''
             if ($(this).attr('data-answer') == currentQuestion.answer) {
-                message += 'correct'
+                message += 'Correct'
+                score++;
             } else {
                 console.log($(this).attr('data-answer'))
                 console.log('Incorrect');
-                message += 'incorrect'
+                message += 'Incorrect'
             }
             questionNumber++;
-            blackScene(questionNumber, message).then(nextQuestion);
+            blackScene(questionNumber, message, `Score: ${score}`).then(nextQuestion);
         }
     })
 

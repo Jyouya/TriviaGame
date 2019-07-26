@@ -145,10 +145,19 @@ body {
     margin: auto;
 }
 
-.black-scene-message {
+.black-scene-message-box {
     position: absolute;
     bottom: 1em;
     font-size: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+}
+
+.black-scene-message {
+    text-align: center;
+    flex-grow: 1;
+
 }
 
 
