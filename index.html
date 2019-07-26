@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Trivia</title>
+    <link href="https://fonts.googleapis.com/css?family=Libre+Caslon+Display|Nanum+Gothic&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div id="timer">
+            <svg id="timer-fill" viewbox="0 0 958 726">
+                <!-- <path fill="#FFFFFF00" stroke="#000000" stroke-width="20" d="M479,0 l454,0 a25,25 1 0,1 25,25 l0,676 a25,25 1 0,1 -25,25 l-454,0"></path> -->
+            </svg>
+        </div>
+        <div class="bg-box">
+            <h1 class="title">Weeb Trivia</h1>
+            <h2 id="question">What is your Quest</h2>
+            <div class="aspect-ratio-box">
+                <div class="answer-box bl-radius br-radius">
+                    <button class="answer blue" value="1">To seek the holy grail</button>
+                    <button class="answer goldenrod" value="2">Blue</button>
+                    <button class="answer red bl-radius" value="3">Yellow</button>
+                    <button class="answer brown br-radius" value="4">AAAAAAAAAA</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="assets/javascript/Question.js"></script>
+    <script src="assets/javascript/app.js"></script>
+</body>
+
+</html>
