@@ -261,7 +261,7 @@ $(document).ready(function () {
     titleScreen().then(newGame);
 
     // Main game loop
-    $('.answer-box').on('click', '.answer', function () {
+    $('.answer-box').on('click', '.answer', function (e) {
         if (buttonsActive) {
             $('.timer-path').stop()
             let message = '';

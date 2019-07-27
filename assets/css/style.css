@@ -95,6 +95,7 @@ body {
     background: whitesmoke;
     border: none;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .answer:hover {
