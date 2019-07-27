@@ -234,7 +234,6 @@ function titleScreen() {
 }
 
 function endScreen() {
-    $('.timer-path').stop();
     $('.container').append(
         $('<div class="title-screen">').append(
             $('<h1 class="main-title">').text(score == questionNumber ? 'Perfect!' : (score >= questionNumber * 3 / 4 ? 'Great Job!' : 'Better luck next time!')),
@@ -264,6 +263,7 @@ $(document).ready(function () {
     // Main game loop
     $('.answer-box').on('click', '.answer', function () {
         if (buttonsActive) {
+            $('.timer-path').stop()
             let message = '';
             if ($(this).attr('data-answer') == currentQuestion.answer) {
                 message += 'Correct';
