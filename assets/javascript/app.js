@@ -84,7 +84,7 @@ function newGame() {
             'Digichalcum',
             'Star Platinum'
         ),
-        new Question('Which of the following is not one of the Pillar-Men from Jojo\'s Bizzare Adventure',
+        new Question('Which of the following is NOT one of the Pillar-Men from Jojo\'s Bizzare Adventure',
             'Kiss',
             'Cars',
             'Wham',
@@ -96,13 +96,22 @@ function newGame() {
             'Haruhi Suzumiya',
             'Amuro Ray'
         ),
+        new Question('Which of the following is NOT a servant class in Fate/Stay Night',
+            'Healer',
+            'Saber',
+            'Archer',
+            'Caster'
+        )
 
     ]
+
+
+    blackScene(questionNumber, 'Black  Scene').then(nextQuestion());
 }
 
 
 function nextQuestion() {
-    questions = questions.reduce((a, v) => a.splice(Math.floor(Math.random() * a.length), 0, v) && a, []);
+    questions = questions.reduce((a, v) => a.splice(Math.floor(Math.random() * (a.length + 1)), 0, v) && a, []);
     currentQuestion = questions.pop();
     displayQuestion(currentQuestion);
 }
@@ -180,11 +189,13 @@ function timeUp() {
     console.log('timeup');
     if (!timeout) {
         timeout = true;
-        questionNumber++;
-        blackScene(questionNumber, 'Not answered', `Score: ${score}`).then(nextQuestion);
-        
+        if (questions.length) {
+            questionNumber++;
+            blackScene(questionNumber, 'Not answered', `Score: ${score}`).then(nextQuestion);
+        } else {
+            endScreen().then(newGame);
+        }
     }
-
 }
 
 function blackScene(number, ...messages) {
@@ -193,6 +204,7 @@ function blackScene(number, ...messages) {
             $('<h1 class="black-scene-number">').text(`${number.toString().padStart(3, '0')}`),
 
             $('<div class="black-scene-message-box">').append(
+                // use map to create an array of messages, then unpack them with the spread operator
                 ...messages.map(message => $('<h3 class="black-scene-message">').text(message))
             )
         )
@@ -203,32 +215,71 @@ function blackScene(number, ...messages) {
     }, 1000)); // It flashes by pretty fast to mimic the 'black scenes' in bakemonogatari
 }
 
+function titleScreen() {
+    $('.container').append(
+        $('<div class="title-screen">').append(
+            $('<h1 class="main-title">').text('Weeb Trivia'),
+            $('<div class="start-btn">').append(
+                ...[1, 2, 3, 4].map($.bind(null, '<div>')), // Create 4 empty divs
+                $('<div class="start-btn-text">').text('Start!'),
+            )
+        )
+    );
+    return new Promise(resolve => {
+        $('.start-btn').on('click', function () {
+            $('.title-screen').remove();
+            resolve();
+        })
+    });
+}
+
+function endScreen() {
+    $('.timer-path').stop();
+    $('.container').append(
+        $('<div class="title-screen">').append(
+            $('<h1 class="main-title">').text(score == questionNumber ? 'Perfect!' : (score >= questionNumber * 3 / 4 ? 'Great Job!' : 'Better luck next time!')),
+            $('<h2 class="end-message">').text(`You scored ${score} out of ${questionNumber}`),
+            $('<div class="start-btn play-again">').append(
+                ...[1, 2, 3, 4].map($.bind(null, '<div>')), // Create 4 empty divs
+                $('<div class="start-btn-text">').text('Play Again!')
+            )
+        )
+    );
+    return new Promise(resolve => {
+        $('.play-again').on('click', function () {
+            $('.title-screen').remove();
+            resolve();
+        });
+    });
+}
 
 $(document).ready(function () {
 
-
-    console.log('debug');
-
+    // Draw our border timer.  May need to be redrawn if the screen size changes
     drawSvgBorder($('#timer-fill'));
 
-    newGame();
-    nextQuestion();
+    // Display the title screen, then initialize the game when the title screen is done
+    titleScreen().then(newGame);
 
-
+    // Main game loop
     $('.answer-box').on('click', '.answer', function () {
         if (buttonsActive) {
-            let message = ''
+            let message = '';
             if ($(this).attr('data-answer') == currentQuestion.answer) {
-                message += 'Correct'
+                message += 'Correct';
                 score++;
             } else {
                 console.log($(this).attr('data-answer'))
                 console.log('Incorrect');
-                message += 'Incorrect'
+                message += 'Incorrect';
             }
-            questionNumber++;
-            blackScene(questionNumber, message, `Score: ${score}`).then(nextQuestion);
-        }
-    })
 
+            if (questions.length) {
+                questionNumber++;
+                blackScene(questionNumber, message, `Score: ${score}`).then(nextQuestion);
+            } else {
+                endScreen().then(newGame);
+            }
+        }
+    });
 })

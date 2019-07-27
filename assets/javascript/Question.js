@@ -8,7 +8,7 @@ class Question {
     
     get options() {
         console.log(this.answers)
-        return this.answers.reduce((a,v)=>a.splice(Math.floor(Math.random() * a.length), 0, v) && a, []);
+        return this.answers.reduce((a,v)=>a.splice(Math.floor(Math.random() * (a.length + 1)), 0, v) && a, []);
     }
 
     set options(arr) {
