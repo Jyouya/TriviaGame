@@ -1,7 +1,10 @@
 body {
     font-family: 'Nanum Gothic', sans-serif;
     background: url('../images/interlaced.png');
-
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
 .container {
@@ -137,8 +140,6 @@ body {
     background-size: 100% 15px;
     border-radius: 25px;
     display:flex;
-    align-items: center;
-    justify-content: center;display:flex;
     align-items: center;
     justify-content: center;
     border-top: 150px solid black;  

@@ -3,7 +3,8 @@ class Question {
         this.question = question;
         this.answer = answer;
         this.answers = [answer, ...wrongAnswers];
-        // one line shuffle https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+
+        // one line shuffle is modified from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
     }
     
     get options() {
