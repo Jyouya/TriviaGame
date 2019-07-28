@@ -7,6 +7,8 @@ let questionNumber;
 let currentQuestion;
 let buttonsActive;
 let timeout;
+let screenSizeCategory;
+const screenSizes = [{ w: 680, v: 1 }, { w: 980, v: 2 }, { w: Infinity, v: 3 }];
 
 function drawSvgBorder(node) {
     node.empty();
@@ -39,16 +41,7 @@ function drawSvgBorder(node) {
 
     node.parent().html(node.parent().html()); // hack to make the svg render
 
-    // const svg = document.getElementById('timer-fill').contentDocument;
-    // console.log(svg);
-
     timerLength = document.querySelector('path').getTotalLength();
-    console.log(timerLength);
-
-    // left = $('#left').css({
-    //     'stroke-dasharray': timerLength,
-    //     'stroke-dashoffset': timerLength
-    // })
 
     $('.timer-path').css({
         'stroke-dasharray': timerLength,
@@ -154,7 +147,6 @@ function displayQuestion(question) {
                             }.bind(this)
                         });
 
-                    // $(this).attr({stroke: '#f5b422'},1000);
                 } else if ($(this).attr('data-color') != 'red' && val < timerLength / 4) {
                     $(this).attr('data-color', 'red');
                     const color = {
@@ -254,6 +246,8 @@ function endScreen() {
 
 $(document).ready(function () {
 
+    screenSizeCategory = screenSizes.find(x => x.w > $(window).width());
+
     // Draw our border timer.  May need to be redrawn if the screen size changes
     drawSvgBorder($('#timer-fill'));
 
@@ -282,4 +276,80 @@ $(document).ready(function () {
             }
         }
     });
+
+    // Detects when we hit our width breakpoints.
+    // Used to make the timer responsive to changes in page size
+    $(window).resize(function () {
+        let size = screenSizes.find(x => x.w > $(window).width()).v;
+        if (size != screenSizeCategory || size == 1) {
+            screenSizeCategory = size;
+            // Determine what percent of time is remaining
+            timePct = parseInt($('.timer-path').css('stroke-dashoffset'), 10) / timerLength;
+
+            $('.timer-path').stop();
+            // redraw the timer bar
+            drawSvgBorder($('#timer-fill'));
+
+            // If we were mid animation, we want to resume animation from where it was
+            if (timePct > 0 && timePct < 1) {
+                // Multiply the percentage of elapsed time by the new length of the bar and restart animation
+                $('.timer-path').stop().css({ 'stroke-dashoffset': timerLength * timePct }).animate({ // Animate the bar's movement
+                    'stroke-dashoffset': 0,
+                }, {
+                        duration: 15000 * timePct,
+                        easing: 'linear',
+                        step: function (val) { // Animate the bar's color changing
+                            if (val > timerLength / 2) {
+                                $(this).attr({ stroke: '#57a4b8' });
+                            } else if ($(this).attr('data-color') == 'blue' && val > timerLength / 4) {
+                                $(this).attr('data-color', 'yellow');
+                                const color = {
+                                    red: 87,
+                                    green: 164,
+                                    blue: 184
+                                }
+                                $(color).animate(
+                                    {
+                                        red: 245,
+                                        green: 180,
+                                        blue: 34
+                                    },
+                                    {
+                                        duration: 1000,
+                                        step: function (tween, el) {
+                                            color[el.prop] = tween;
+                                            $(this).attr('stroke', `rgb(${color.red}, ${color.green}, ${color.blue})`)
+                                        }.bind(this)
+                                    });
+
+                            } else if ($(this).attr('data-color') != 'red' && val < timerLength / 4) {
+                                $(this).attr('data-color', 'red');
+                                const color = {
+                                    red: 245,
+                                    green: 180,
+                                    blue: 34
+                                }
+                                $(color).animate(
+                                    {
+                                        red: 242,
+                                        green: 2,
+                                        blue: 5
+                                    },
+                                    {
+                                        duration: 1000,
+                                        step: function (tween, el) {
+                                            color[el.prop] = tween;
+                                            $(this).attr('stroke', `rgb(${color.red}, ${color.green}, ${color.blue})`)
+                                        }.bind(this)
+                                    });
+
+                                $(this).animate({ stroke: 'rgb(242, 2, 5)' }, 1000);
+                            }
+                        },
+                        done: timeUp
+                    });
+            }
+        }
+    });
+
 })
