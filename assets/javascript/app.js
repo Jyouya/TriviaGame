@@ -106,7 +106,7 @@ function newGame() {
     ]
 
 
-    blackScene(questionNumber, 'Black  Scene').then(nextQuestion());
+    blackScene(questionNumber, 'Black  Scene').then(nextQuestion);
 }
 
 
