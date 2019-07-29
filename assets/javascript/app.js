@@ -94,7 +94,30 @@ function newGame() {
             'Saber',
             'Archer',
             'Caster'
-        )
+        ),
+        new Question('Which character says the famous "It\'s over 9000!" line in Dragon Ball Z?',
+            'Nappa',
+            'Raditz',
+            'Vegeta',
+            'Goku'
+        ),
+        new Question('Who teaches Goku the Kamahameha in Dragon Ball?',
+
+        
+        ),
+        new Question('What animal does the principal suplex in Nichijou?',
+            'A Deer',
+            'An Owl',
+            'A Bear',
+            'A Dog',
+        ),
+        new Question('What is Ed\'s title in Cowboy Bebpop?',
+            'Radical',
+            'King',
+            'Sir',
+            'Crazy'
+        ),
+        new Question('')
 
     ]
 
@@ -213,6 +236,7 @@ function titleScreen() {
             $('<h1 class="main-title">').text('Weeb Trivia'),
             $('<div class="start-btn">').append(
                 ...[1, 2, 3, 4].map($.bind(null, '<div>')), // Create 4 empty divs
+                // [...(new Array(4))].map()
                 $('<div class="start-btn-text">').text('Start!'),
             )
         )
