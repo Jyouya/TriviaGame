@@ -102,8 +102,10 @@ function newGame() {
             'Goku'
         ),
         new Question('Who teaches Goku the Kamahameha in Dragon Ball?',
-
-        
+            'Master Roshi',
+            'King Kai',
+            'Mr. Popo',
+            'Majin Buu'
         ),
         new Question('What animal does the principal suplex in Nichijou?',
             'A Deer',
@@ -117,8 +119,18 @@ function newGame() {
             'Sir',
             'Crazy'
         ),
-        new Question('')
-
+        new Question('Which anime from 2007 features "Hare Hare Yukai" as its ending theme',
+            'The Melancholy of Haruhi Suzumiya',
+            'Gurren Lagann',
+            'Digimon Savers',
+            'Spice and Wolf'
+        ),
+        new Question('Which piece of music plays during "The Day of Sagitarius" in "The Melancholy of Haruhi Suzumiya"',
+            'Tchaikovsky\'s 4th Symphony',
+            'Dvorak\'s 9th Symphony',
+            'Beethoven\'s 5th Symphony',
+            'Kozhevnikov\'s 3rd Symphony'
+        ),
     ]
 
 
@@ -233,7 +245,7 @@ function blackScene(number, ...messages) {
 function titleScreen() {
     $('.container').append(
         $('<div class="title-screen">').append(
-            $('<h1 class="main-title">').text('Weeb Trivia'),
+            $('<h1 class="main-title">').text('Anime Trivia'),
             $('<div class="start-btn">').append(
                 ...[1, 2, 3, 4].map($.bind(null, '<div>')), // Create 4 empty divs
                 // [...(new Array(4))].map()
